@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <wait.h>
 #include "file.h"
+#include "cwd.h"
 #include "str.h"
 
 void exec(char **argv) {
@@ -52,7 +53,9 @@ int run_command(char *line) {
         if (words[1] != NULL)
             return atoi(words[1]);
         return 1;
-    } else
+    } else if (!strcmp(words[0], "cd"))
+        cd(words);
+    else
         exec(words);
 
     free(words);
@@ -63,7 +66,7 @@ int run_text(char *data) {
     char **lines = split(data, "\n");
     int status = 0;
 
-    for (unsigned int i = 0; i < strlen((char*) lines); i++)
+    for (unsigned int i = 0; lines[i]; i++)
         if ((status = run_command(lines[i])))
             return status;
 

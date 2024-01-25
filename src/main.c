@@ -26,6 +26,25 @@
 #include "vector.h"
 #include "cwd.h"
 
+static const char *PS1 = "\\W # ";
+vector_var(char, prompt);
+
+inline static void update_prompt() {
+    vector_clear(char, prompt);
+    for (unsigned int i = 0; PS1[i]; i++) {
+        char ch = PS1[i];
+        if (ch == '\\') {
+            switch (PS1[++i]) {
+                case 'W': vector_push_back_word(prompt, getCWD()); break;
+                default:
+                    fprintf(stderr, "unknown backslash symbol in $PS1: '\\%c'\n", PS1[i]);
+                    exit(1);
+            }
+        } else
+            vector_push_back(prompt, ch);
+    }
+}
+
 char *getinput(char *prompt) {
     printf("%s", prompt);
     char *data = readFile(stdin);
@@ -33,6 +52,7 @@ char *getinput(char *prompt) {
 }
 
 int main(int argc, char **argv) {
+    vector_init(char, prompt);
     signal(SIGINT, SIG_IGN);
 
     if (argc > 1) {
@@ -60,11 +80,9 @@ int main(int argc, char **argv) {
         if (optind < argc)
             return run_file(argv[optind]);
     }
-    vector(char, prompt);
-    vector_push_back_word(prompt, getCWD());
-    vector_push_back_word(prompt, " # ");
 
     while (1) {
+        update_prompt();
         char *input = getinput(prompt.data);
         int status = 0;
 

@@ -19,6 +19,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+#include "vector.h"
 
 static char cwd[4096];
 
@@ -28,4 +30,16 @@ char *getCWD() {
         exit(1);
     }
     return cwd;
+}
+
+void cd(char **argv) {
+    vector_size(argv, len);
+    if (len != 2) {
+        fprintf(stderr, "cd: the command requires only 1 argument\n");
+        return;
+    }
+
+    int status = chdir(argv[1]);
+    if (status)
+        perror("cd");
 }

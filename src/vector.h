@@ -17,21 +17,40 @@
  */
 
 #pragma once
+#include <string.h>
 #include "memory.h"
 #define PAGE_SIZE 16
 
-#define vector(type, name) struct \
+#define vector_var(type, name) struct \
     {                             \
         char typeSize;            \
         type *data;               \
         unsigned int len;         \
         unsigned int size;        \
-    } name = { sizeof(type), (type*) memalloc(PAGE_SIZE * sizeof(type)), 0, PAGE_SIZE }
-#define vector_free(name)         \
-    {                             \
-        free(name.data);          \
-        name = {0, 0, 0, 0};      \
+    } name;
+
+#define vector_init(type, name)   \
+    name.typeSize = sizeof(type); \
+    name.data = (type*) memalloc(PAGE_SIZE * sizeof(type)); \
+    name.len = 0;                 \
+    name.size = PAGE_SIZE;        \
+    name.data[0] = '\0';
+
+#define vector(type, name)        \
+    vector_var(type, name);       \
+    vector_init(type, name);
+
+#define vector_free(name)                    \
+    {                                        \
+        free(name.data);                     \
+        memset(&name, 0, sizeof(name));      \
     }
+
+#define vector_clear(type, name)  \
+    vector_free(name);            \
+    vector_init(type, name);
+
+
 
 #define vector_push_back(vec, val)                                                   \
     {                                                                                \
@@ -46,3 +65,7 @@
         for (int i = 0; ptr[i]; i++)        \
             vector_push_back(vec, ptr[i]);  \
     }
+
+#define vector_size(vec, outvar)        \
+    unsigned long outvar = 0;           \
+    for (; vec[outvar]; outvar++);
