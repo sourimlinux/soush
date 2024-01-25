@@ -1,0 +1,25 @@
+/*
+ * soush -- SOUrim SHell
+ * Copyright (C) 2024 r2u2team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+#include <stdbool.h>
+#define SOUSH_VERSION "0.1"
+
+#define PRINT_HELP(prog, args, description, options) printf("Usage: %s %s\n%s\n\nOptions:\n%s\n", prog, args, description, options)
+#define PRINT_SHORT_HELP(prog, args, description) printf("Usage: %s %s\n%s\n", prog, args, description)
+#define PRINT_VERSION() printf("soush %s\n", SOUSH_VERSION)
