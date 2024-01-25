@@ -1,2 +1,7 @@
-# soush
-Coming soon...
+# SouSH
+Shell for Sourim.
+
+build:
+```sh
+./build.sh
+```
