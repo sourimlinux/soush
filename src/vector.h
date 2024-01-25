@@ -18,7 +18,7 @@
 
 #pragma once
 #include "memory.h"
-#define PAGE_SIZE 8
+#define PAGE_SIZE 16
 
 #define vector(type, name) struct \
     {                             \
@@ -26,7 +26,7 @@
         type *data;               \
         unsigned int len;         \
         unsigned int size;        \
-    } name = { sizeof(type), (type *)memalloc(PAGE_SIZE * sizeof(type)), 0, PAGE_SIZE }
+    } name = { sizeof(type), (type*) memalloc(PAGE_SIZE * sizeof(type)), 0, PAGE_SIZE }
 #define vector_free(name)         \
     {                             \
         free(name.data);          \
